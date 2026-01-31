@@ -1,0 +1,77 @@
+---
+# --------------------------------------
+# Namespace
+# --------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: python-flask-namespace
+  
+---
+# --------------------------------------
+# Deployment
+# --------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: python-flask-namespace
+  name: python-flask-deployment
+  labels:
+    app: python-flask-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: python-flask-app
+  template:
+    metadata:
+      labels:
+        app: python-flask-app
+    spec:
+      containers:
+      - name: python-flask-container
+        image: 264570364318.dkr.ecr.us-east-1.amazonaws.com/my-web-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+# --------------------------------------
+# Service
+# --------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: python-flask-namespace
+  name: python-flask-service
+spec:
+  selector:
+    app: python-flask-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: ClusterIP
+---
+# --------------------------------------
+# Ingress (AWS Load Balancer Controller)
+# --------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: python-flask-namespace
+  name: python-flask-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: python-flask-service
+            port:
+              number: 80
