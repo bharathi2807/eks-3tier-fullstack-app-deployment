@@ -28,13 +28,18 @@ Client
 ---
 
 ## Project Structure
+
+```text
+
 ├── app.py # Flask application
 ├── requirements.txt # Python dependencies
 ├── Dockerfile # Container image definition
 ├── flask-eks.yml # Kubernetes manifests (Deployment, Service, Ingress)
-└── iam_policy.json # IAM policy for ALB controller
+├── iam_policy.json # IAM policy for ALB controller
+├── README.md
+├── .gitignore
 
-
+```
 ---
 
 ## Key Kubernetes Concepts Used
@@ -58,12 +63,18 @@ Client
 ---
 ## Key CLI Commands Used
 
+````md
 ### Create EKS Fargate Cluster
 ```bash
 eksctl create cluster \
   --name demo-cluster \
   --region us-east-1 \
   --fargate
+````
+
+### Install AWS Load Balancer Controller
+
+```bash
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
@@ -72,12 +83,21 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=demo-cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
+```
 
+### Deploy Application
+
+```bash
 kubectl apply -f flask-eks.yml
+```
 
+### Verify Resources
+
+```bash
 kubectl get pods -A
 kubectl get svc -A
 kubectl get ingress -A
+```
 ---
 
 ## What I Learned
