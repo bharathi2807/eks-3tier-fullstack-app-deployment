@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-frontend-service # service name
+spec:
+  type: ClusterIP
+  selector:
+    app: registerapp-frontend #from frontend/deployment.yml template labels
+  ports:
+    - protocol: TCP
+      port: 80 # service port to access the frontend app from other pods internally
+      targetPort: 80 # container port from frontend/deployment.yml
