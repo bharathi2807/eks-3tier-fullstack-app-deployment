@@ -1,6 +1,4 @@
 
----
-
 # 🚀 Full Stack 3-Tier Application Deployment on AWS EKS (With Stateful Database)
 
 ## 📌 Project Overview
