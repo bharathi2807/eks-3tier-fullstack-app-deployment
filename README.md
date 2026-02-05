@@ -226,13 +226,13 @@ kubectl apply -f ingress/
 Frontend:
 
 ```
-http://<BACKEND-ALB-DNS>
+http://<ALB-DNS>
 ```
 
 Backend API:
 
 ```
-http://<FORNTEND-ALB-DNS>/api/register
+http://<ALB-DNS>/api/register
 ```
 
 ---
