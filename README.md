@@ -63,14 +63,14 @@ Client
 ---
 ## Key CLI Commands Used
 
-````md
 ### Create EKS Fargate Cluster
+
 ```bash
 eksctl create cluster \
   --name demo-cluster \
   --region us-east-1 \
   --fargate
-````
+  ```
 
 ### Install AWS Load Balancer Controller
 
