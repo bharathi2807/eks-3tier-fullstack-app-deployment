@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-backend-service # service name
+spec:
+  type: ClusterIP
+  selector:
+    app: registerapp-backend #from backend/deployment.yml template labels
+  ports:
+    - protocol: TCP
+      port: 8002 # service port to access the backend app from other pods internally
+      targetPort: 8080 # container port from backend/deployment.yml
