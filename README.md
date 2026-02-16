@@ -219,6 +219,42 @@ kubectl apply -f backend/
 kubectl apply -f frontend/
 kubectl apply -f ingress/
 ```
+---
+
+## 🤖 CI/CD Automation
+
+This project includes a **Jenkins pipeline** that fully automates the deployment workflow for the 3-tier application:
+
+### Pipeline Features
+
+1. **Build Docker Images**
+
+   * Frontend and backend images are automatically built using the source code from GitHub.
+   * Each image is tagged with the Jenkins build number for traceability.
+
+2. **Push to AWS ECR**
+
+   * Images are pushed securely to AWS Elastic Container Registry (ECR) using IAM credentials.
+
+3. **Deploy to AWS EKS**
+
+   * The pipeline updates the Kubernetes deployments with the new images.
+   * `kubectl rollout status` ensures pods are ready before the pipeline completes.
+   * Supports automatic updates for both frontend and backend services.
+
+4. **Rollback and Error Handling (..to be done)**
+
+   * If a deployment fails, the pipeline can automatically rollback to the previous stable version.
+   * Optional notifications can be integrated (Slack, email) for deployment success or failure.
+
+---
+
+### Benefits
+
+* Fully automated deployment reduces human errors.
+* Ensures consistent and repeatable deployments across environments.
+* Tracks build numbers and image versions for auditability.
+* Enables rapid updates to application services without downtime.
 
 ---
 
