@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = "ap-south-1"
+        ECR_REPO = "264570364318.dkr.ecr.ap-south-1.amazonaws.com/register-backend"
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        NAMESPACE = "my3tier"
+        CLUSTER_NAME = "register-app-cluster"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scmGit(
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        credentialsId: 'github-creds',
+                        url: 'https://github.com/bharathi2807/register-backend.git'
+                    ]]
+                )
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh '''
+                docker build -t $ECR_REPO:$IMAGE_TAG .
+                docker tag $ECR_REPO:$IMAGE_TAG $ECR_REPO:latest
+                '''
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-jenkins-creds'
+                ]]) {
+                    sh '''
+                    aws ecr get-login-password --region ap-south-1 | \
+                    docker login --username AWS --password-stdin 264570364318.dkr.ecr.ap-south-1.amazonaws.com
+                    '''
+                }
+            }
+    }
+
+
+        stage('Push to ECR') {
+            steps {
+                sh '''
+                docker push $ECR_REPO:$IMAGE_TAG
+                docker push $ECR_REPO:latest
+                '''
+            }
+        }
+
+        stage('Deploy to EKS') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-jenkins-creds'
+                ]]) {
+                    sh '''
+                    # Generate kubeconfig for EKS cluster
+                    aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+                    # Update deployment image
+                    kubectl set image deployment/myapp-backend \
+                    backend=$ECR_REPO:$IMAGE_TAG \
+                    -n $NAMESPACE
+
+                    # Wait for rollout to finish
+                    kubectl rollout status deployment/myapp-backend -n $NAMESPACE
+                    '''
+                }
+            }
+        }
+    }
+}
