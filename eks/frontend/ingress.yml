@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: my3tier
-  name: my-frontend-ingress
+  name: my-frontend-ingress # ingress name
+  namespace: my3tier # namespace where frontend application is deployed
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip

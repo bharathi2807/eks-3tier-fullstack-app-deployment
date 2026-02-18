@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-frontend-service # service name
+  namespace: my3tier # namespace where frontend application is deployed
 spec:
   type: ClusterIP
   selector:

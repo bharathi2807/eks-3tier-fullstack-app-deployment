@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  myapp-backend
+  namespace: my3tier # namespace where backend application is deployed
   labels:
     app: registerapp-backend
 spec:

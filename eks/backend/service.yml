@@ -1,12 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-backend-service # service name
+  name: my-backend-service # backend service name
+  namespace: my3tier # namespace where backend application is deployed
+  labels:
+    app: registerapp-backend # must match deployment template labels. Used by ServiceMonitor to discover this service as a target for monitoring
 spec:
   type: ClusterIP
   selector:
-    app: registerapp-backend #from backend/deployment.yml template labels
+    app: registerapp-backend # must match pod labels from deployment template
   ports:
-    - protocol: TCP
-      port: 8002 # service port to access the backend app from other pods internally
-      targetPort: 8080 # container port from backend/deployment.yml
+    - name: http # service port name used by ServiceMonitor
+      protocol: TCP
+      port: 8002 # service port used by other pods inside cluster
+      targetPort: 8080 # container port exposed by backend pod

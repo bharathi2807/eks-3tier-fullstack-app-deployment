@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: backend-monitor # Logical name for Prometheus target
+  namespace: monitoring # Must be same namespace as Prometheus installation
+spec:
+  selector:
+    matchLabels:
+      app: registerapp-backend # Must match Service.metadata.labels (NOT deployment labels)
+  namespaceSelector:
+    matchNames:
+      - my3tier # Namespace where backend Service exists
+  endpoints:
+  - port: http # Must match Service port name
+    path: /actuator/prometheus # Spring Boot Prometheus metrics endpoint
+    interval: 30s # Scrape frequency

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: myapp-mysql # stateful set name
+  namespace: my3tier # namespace where mysql is deployed
 spec:
   selector:
     matchLabels:
