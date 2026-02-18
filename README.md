@@ -338,16 +338,16 @@ This architecture simulates production workloads by combining:
 ## 📸 Proof of Deployment
 
 ### Application UI
+![alt text](image.png)
 
-![alt text](image-2.png)
 
 ### Grafana Kubernetes Metrics
 
 ![alt text](image-1.png)
 
 ### JVM Metrics Dashboard
+![alt text](image-2.png)
 
-![alt text](image.png)
 
 ---
 ## 🔗 Application Access
@@ -396,15 +396,6 @@ http://<ALB-DNS>/api/register
 * ALB based ingress routing in EKS
 * Persistent storage using EBS volumes
 * Real-world Kubernetes debugging
-
----
-
-## 🚀 Future Improvements
-
-* HTTPS using AWS ACM
-* CI/CD using GitHub Actions
-* Helm Chart Packaging
-* Monitoring using Prometheus + Grafana
 
 ---
 
