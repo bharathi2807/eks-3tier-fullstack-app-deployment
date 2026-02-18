@@ -9,7 +9,7 @@ import { User } from '../models/user';
 })
 export class UserService {
 
-private apiUrl = 'http://k8s-my3tier-mybacken-5c2cb5adbb-1673693004.ap-south-1.elb.amazonaws.com/api/register';
+private apiUrl = 'http://k8s-my3tier-mybacken-5c2cb5adbb-1740059992.ap-south-1.elb.amazonaws.com/api/register';
 
   constructor(private http: HttpClient) {}
 
