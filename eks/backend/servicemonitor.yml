@@ -13,6 +13,6 @@ spec:
     matchNames:
       - my3tier # Namespace where backend Service exists
   endpoints:
-  - port: http # Must match Service port name
+  - port: http # Must match Service port name from backend/service.yml
     path: /actuator/prometheus # Spring Boot Prometheus metrics endpoint
     interval: 30s # Scrape frequency
