@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: backend-monitor # Logical name for Prometheus target
   namespace: monitoring # Must be same namespace as Prometheus installation
+  labels:
+    release: monitoring # Must match Prometheus release name for discovery
 spec:
   selector:
     matchLabels:
