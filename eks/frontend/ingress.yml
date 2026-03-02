@@ -17,4 +17,4 @@ spec:
           service:
             name: my-frontend-service
             port:
-              number: 80
+              number: 80 # service port from frontend/service.yml

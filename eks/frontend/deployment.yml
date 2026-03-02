@@ -20,4 +20,4 @@ spec:
         image: 264570364318.dkr.ecr.ap-south-1.amazonaws.com/register-frontend:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 80 # frontend port
+        - containerPort: 80 # container port to access the frontend app from service.yml targetPort

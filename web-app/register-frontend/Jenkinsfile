@@ -22,7 +22,27 @@ pipeline {
                 )
             }
         }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh 'npm run lint'
+            }
+        }
 
+         stage('Run Tests') {
+            steps {
+                sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
+            }
+        }
+        stage('Build Production') {
+            steps {
+                sh 'npm run build --configuration production'
+            }
+        }
         stage('Build Image') {
             steps {
                 sh '''
@@ -31,7 +51,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Login to ECR') {
             steps {
                 withCredentials([[
@@ -39,14 +58,12 @@ pipeline {
                     credentialsId: 'aws-jenkins-creds'
                 ]]) {
                     sh '''
-                    aws ecr get-login-password --region ap-south-1 | \
+                    aws ecr get-login-password --region $AWS_REGION | \
                     docker login --username AWS --password-stdin 264570364318.dkr.ecr.ap-south-1.amazonaws.com
                     '''
                 }
             }
-    }
-
-
+       }
         stage('Push to ECR') {
             steps {
                 sh '''

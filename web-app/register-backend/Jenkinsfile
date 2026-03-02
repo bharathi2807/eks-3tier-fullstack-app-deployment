@@ -22,6 +22,11 @@ pipeline {
                 )
             }
         }
+        stage('Build & Test') {
+            steps {
+                sh 'mvn clean verify'
+            }
+        }
 
         stage('Build Image') {
             steps {
@@ -39,7 +44,7 @@ pipeline {
                     credentialsId: 'aws-jenkins-creds'
                 ]]) {
                     sh '''
-                    aws ecr get-login-password --region ap-south-1 | \
+                    aws ecr get-login-password --region $AWS_REGION | \
                     docker login --username AWS --password-stdin 264570364318.dkr.ecr.ap-south-1.amazonaws.com
                     '''
                 }
