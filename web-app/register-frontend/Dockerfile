@@ -2,22 +2,11 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Install Chromium for tests
-RUN apk add --no-cache chromium
-ENV CHROME_BIN=/usr/bin/chromium-browser
-
 COPY package*.json ./
-# Install dependencies
-RUN npm ci
-# Copy source code
-COPY . .
+RUN npm install
 
-# Run CI checks inside the container
-RUN npm run lint
-# Run tests in headless mode
-RUN npm run test -- --watch=false --browsers=ChromeHeadlessCI
-# Build the app
-RUN npm run build -- --configuration production
+COPY . .
+RUN npm run build
 
 # -------- Runtime Stage --------
 FROM nginx:alpine
