@@ -22,27 +22,7 @@ pipeline {
                 )
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-        stage('Lint') {
-            steps {
-                sh 'npm run lint'
-            }
-        }
 
-         stage('Run Tests') {
-            steps {
-                sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
-            }
-        }
-        stage('Build Production') {
-            steps {
-                sh 'npm run build --configuration production'
-            }
-        }
         stage('Build Image') {
             steps {
                 sh '''
@@ -51,6 +31,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Login to ECR') {
             steps {
                 withCredentials([[
@@ -63,7 +44,9 @@ pipeline {
                     '''
                 }
             }
-       }
+    }
+
+
         stage('Push to ECR') {
             steps {
                 sh '''

@@ -22,11 +22,6 @@ pipeline {
                 )
             }
         }
-        stage('Build & Test') {
-            steps {
-                sh 'mvn clean verify'
-            }
-        }
 
         stage('Build Image') {
             steps {

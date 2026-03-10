@@ -1,8 +1,25 @@
-FROM eclipse-temurin:17-jre
+########### Build Stage ###########
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY target/register-0.0.1-SNAPSHOT.jar app.jar
+# Cache dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code
+COPY src ./src
+
+# test and package the application
+RUN mvn clean package
+
+########### Runtime Stage ###########
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy the built Spring Boot jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
